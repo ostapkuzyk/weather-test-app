@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Icon } from '@/components/icon';
+import { Icon } from '../icon';
 import { useRouter } from 'expo-router';
 import { useAppContext } from '@/context/AppContext';
 
@@ -7,11 +7,11 @@ const Header = () => {
   const router = useRouter();
   const { address } = useAppContext();
   const openSearchAddress = () => {
-    router.navigate('searchAddress');
+    router.push('/searchAddress');
   };
 
   const openSettings = () => {
-    router.navigate('settings');
+    router.push('/settings');
   };
   return (
     <View style={styles.header}>

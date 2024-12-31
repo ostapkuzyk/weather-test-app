@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import axios, { AxiosResponse } from 'axios';
-import { API_KEY } from '@env';
 import { useRouter } from 'expo-router';
-import { TAddress } from '@/types/AppContext';
+import { TAddress } from '../../../weather/types/AppContext';
 
 interface AddressInputProps {
   address: string;
@@ -41,7 +40,7 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
         params: {
           q: query,
           limit: 5,
-          appid: API_KEY,
+          appid: process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY,
         },
       })) as AxiosResponse<Location[]>;
       setSearchResults(response.data);

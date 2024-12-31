@@ -1,4 +1,4 @@
-export interface WeatherResponse {
+export interface OpenWeatherResponse {
   lat: number;
   lon: number;
   timezone: string;

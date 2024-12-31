@@ -1,4 +1,4 @@
-import { WeatherResponse } from '@/types/OpenWeatherMap';
+import { OpenWeatherResponse } from '@/types/OpenWeatherMap';
 import { TAddress } from '@/types/AppContext';
 
 export const initAsyncStorage: TAddress = {
@@ -6,7 +6,7 @@ export const initAsyncStorage: TAddress = {
   lat: 49.841952,
   lon: 24.0315921,
 };
-export const testData: WeatherResponse = {
+export const testData: OpenWeatherResponse = {
   lat: 49.8106,
   lon: 24.0163,
   timezone: 'Europe/Kyiv',

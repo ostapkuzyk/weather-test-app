@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Icon } from '@/components';
+import { Icon } from '../index';
 
 interface CurrentWeatherProps {
   temp: number;
@@ -29,7 +29,7 @@ const CurrentWeather = ({ temp, feelTemp, dewPoint, humidity, windSpeed }: Curre
         <View style={styles.divider} />
         <View style={styles.addWeatherItem}>
           <Icon name={'wind'} color="white" size={28} />
-          <Text style={styles.feelTemp}>{windSpeed}</Text>
+          <Text style={styles.feelTemp}>{windSpeed.toFixed(1)}</Text>
         </View>
       </View>
     </View>

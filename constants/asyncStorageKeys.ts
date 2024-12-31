@@ -1,0 +1,4 @@
+const STORAGE_ADDRESS_KEY = 'userAddress';
+const STORAGE_WEATHER_SERVICE_KEY = 'weatherService';
+
+export { STORAGE_ADDRESS_KEY, STORAGE_WEATHER_SERVICE_KEY };

@@ -1,7 +1,7 @@
 import type { IconMoonProps } from 'react-native-icomoon';
 import Icomoon, { iconList } from 'react-native-icomoon';
 
-import json from '../../assets/icommon/selection.json';
+import json from '../../assets/icomoon/selection.json';
 
 type IconProps = Omit<IconMoonProps, 'iconSet'>;
 

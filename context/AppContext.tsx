@@ -1,29 +1,43 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { STORAGE_ADDRESS_KEY } from '@/constants/asuncStorageKeys';
-import { AppContextType, TAddress } from '@/types/AppContext';
+import { STORAGE_ADDRESS_KEY, STORAGE_WEATHER_SERVICE_KEY } from '@/constants/asyncStorageKeys';
+import { AppContextType, TAddress, WeatherService } from '@/types/AppContext';
 import { initAsyncStorage } from '@/constants/mockData';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{
+  children: ReactNode;
+}> = ({ children }) => {
   const [address, setAddress] = useState<TAddress>(initAsyncStorage);
+  const [weatherService, setWeatherService] = useState<WeatherService>(WeatherService.WeatherApi);
 
   useEffect(() => {
-    const loadAddress = async () => {
+    const loadInitialData = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem(STORAGE_ADDRESS_KEY);
-        const parsedValue: TAddress | null = jsonValue != null ? JSON.parse(jsonValue) : null;
-        if (parsedValue) {
-          setAddress(parsedValue);
+        // Load address
+        const addressJson = await AsyncStorage.getItem(STORAGE_ADDRESS_KEY);
+        const parsedAddress: TAddress | null = addressJson != null ? JSON.parse(addressJson) : null;
+        if (parsedAddress) {
+          setAddress(parsedAddress);
+        }
+
+        // Load weather service
+        const service = await AsyncStorage.getItem(STORAGE_WEATHER_SERVICE_KEY);
+        const parsedService: WeatherService | null = service != null ? JSON.parse(service) : null;
+
+        if (
+          parsedService &&
+          Object.values(WeatherService).includes(parsedService as WeatherService)
+        ) {
+          setWeatherService(parsedService as WeatherService);
         }
       } catch (error) {
-        console.error('Error reading object from AsyncStorage:', error);
-        return null;
+        console.error('Error loading data from AsyncStorage:', error);
       }
     };
 
-    loadAddress();
+    loadInitialData();
   }, []);
 
   const handleChangeAddress = async (newAddress: TAddress) => {
@@ -36,9 +50,24 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
-  return (
-    <AppContext.Provider value={{ address, handleChangeAddress }}>{children}</AppContext.Provider>
-  );
+  const handleSetWeatherService = async (service: WeatherService) => {
+    try {
+      const jsonValue = JSON.stringify(service);
+      await AsyncStorage.setItem(STORAGE_WEATHER_SERVICE_KEY, jsonValue);
+      setWeatherService(service);
+    } catch (error) {
+      console.error('Failed to save weather service to AsyncStorage:', error);
+    }
+  };
+
+  const contextValues: AppContextType = {
+    address,
+    handleChangeAddress,
+    weatherService,
+    setWeatherService: handleSetWeatherService,
+  };
+
+  return <AppContext.Provider value={contextValues}>{children}</AppContext.Provider>;
 };
 
 export const useAppContext = () => {

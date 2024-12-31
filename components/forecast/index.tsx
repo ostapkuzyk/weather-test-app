@@ -1,11 +1,11 @@
 import React from 'react';
-import { DailyWeather } from '@/types/OpenWeatherMap';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Icon, WeatherIcon } from '@/components';
+import { Icon, WeatherIcon } from '../index';
 import { format } from 'date-fns';
+import { UnifiedWeatherForecast } from '@/types/UnifiedWeather';
 
 interface ForecastProps {
-  daily: DailyWeather[];
+  daily: UnifiedWeatherForecast[];
 }
 
 const Forecast = ({ daily }: ForecastProps) => {
@@ -22,17 +22,16 @@ const Forecast = ({ daily }: ForecastProps) => {
         }}
       >
         {daily.map((el) => {
-          const date = new Date(el.dt * 1000);
-          const dayOfWeek = format(date, 'EEEE');
+          const dayOfWeek = format(el.date, 'EEEE');
           return (
-            <View key={el.dt + el.sunrise} style={styles.dayItem}>
+            <View key={el.date + el.windSpeed} style={styles.dayItem}>
               <Text style={styles.dayOfWeek}>{dayOfWeek}</Text>
               <View style={{ flex: 2 }}>
-                <WeatherIcon size={40} name={el.weather[0].icon} />
+                <WeatherIcon size={40} name={el.icon} />
               </View>
               <View style={styles.tempMaxMin}>
-                <Text style={styles.tempMaxTitle}>{Math.floor(el.temp.max)}°C</Text>
-                <Text style={styles.tempMinTitle}>{Math.floor(el.temp.min)}°C</Text>
+                <Text style={styles.tempMaxTitle}>{Math.floor(el.maxTemp)}°C</Text>
+                <Text style={styles.tempMinTitle}>{Math.floor(el.minTemp)}°C</Text>
               </View>
             </View>
           );
