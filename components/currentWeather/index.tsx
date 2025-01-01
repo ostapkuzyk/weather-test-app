@@ -12,7 +12,7 @@ interface CurrentWeatherProps {
 
 const CurrentWeather = ({ temp, feelTemp, dewPoint, humidity, windSpeed }: CurrentWeatherProps) => {
   return (
-    <View style={styles.container}>
+    <View testID='currentWeather' style={styles.container}>
       <Text style={styles.temp}>{Math.floor(temp)}°</Text>
       <Text style={styles.feelTemp}>Feels like: {Math.floor(feelTemp)}°</Text>
 

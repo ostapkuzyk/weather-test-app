@@ -14,7 +14,7 @@ const Header = () => {
     router.push('/settings');
   };
   return (
-    <View style={styles.header}>
+    <View testID='header' style={styles.header}>
       <Pressable onPress={openSearchAddress} style={styles.locationWrap}>
         <Icon size={40} color="white" name="location" />
         <Text style={styles.locationText}>{address.name}</Text>

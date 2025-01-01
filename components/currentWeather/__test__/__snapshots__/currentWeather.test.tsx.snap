@@ -10,6 +10,7 @@ exports[`currentWeather renders without crashing 1`] = `
       "width": "100%",
     }
   }
+  testID="currentWeather"
 >
   <Text
     style={

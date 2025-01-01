@@ -9,6 +9,7 @@ exports[`header renders without crashing 1`] = `
       "justifyContent": "space-between",
     }
   }
+  testID="header"
 >
   <View
     accessibilityState={
