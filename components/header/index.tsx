@@ -5,7 +5,7 @@ import { useAppContext } from '@/context/AppContext';
 
 const Header = () => {
   const router = useRouter();
-  const { address, weatherService } = useAppContext();
+  const { address } = useAppContext();
   const openSearchAddress = () => {
     router.push('/searchAddress');
   };

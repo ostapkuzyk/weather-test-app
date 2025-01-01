@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'expo-router';
 import { TAddress } from '../../../weather/types/AppContext';
 import _ from 'lodash';
+import { useAppContext } from '@/context/AppContext';
+import { useAxiosInstance } from '@/api';
 
 interface AddressInputProps {
   address: string;
@@ -18,16 +19,13 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
   const addressRegex = /^[a-zA-Z0-9\s,]+$/;
   const [inputText, setInputText] = useState(address);
 
+  const { weatherService } = useAppContext();
+  const { fetchGeoCodingData } = useAxiosInstance(weatherService);
+  
   const fetchAddresses = async (query: string) => {
     try {
-      const response = (await axios.get(`https://api.openweathermap.org/geo/1.0/direct`, {
-        params: {
-          q: query,
-          limit: 5,
-          appid: process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY,
-        },
-      })) as AxiosResponse<Location[]>;
-      setSearchResults(response.data);
+      const response = await fetchGeoCodingData(query);
+      setSearchResults(response);
     } catch (error) {
 
       console.error('Error fetching addresses:', error);

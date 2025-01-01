@@ -9,7 +9,7 @@ import CurrentWeather from '@/components/currentWeather';
 import Forecast from '@/components/forecast';
 import { useAppContext } from '@/context/AppContext';
 import { UnifiedWeatherResponse } from '@/types/UnifiedWeather';
-import { createAxiosInstance } from '@/api';
+import { useAxiosInstance } from '@/api';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Home = () => {
@@ -18,15 +18,15 @@ const Home = () => {
   const [weather, setWeather] = useState<UnifiedWeatherResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { fetchWeather } = useAxiosInstance(weatherService);
 
   const fetchWeatherData = async () => {
     if (!address.lat || !address.lon) return;
 
     setIsLoading(true);
-    const axiosInstance = createAxiosInstance(weatherService);
-
+    
     try {
-      let weather = await axiosInstance.fetchWeather(address);
+      let weather = await fetchWeather(address);
       setWeather(weather);
     } catch (error) {
       console.error('Error fetching weather data:', error);

@@ -31,7 +31,7 @@ const weatherServiceConfigs: Record<WeatherService, WeatherServiceConfig> = {
   }
 };
 
-export const createAxiosInstance = (service: WeatherService) => {
+export const useAxiosInstance = (service: WeatherService) => {
   const { apiKey, baseUrl } = weatherServiceConfigs[service];
 
   const axiosInstance = axios.create({
@@ -84,8 +84,8 @@ export const createAxiosInstance = (service: WeatherService) => {
         },
       });
       return mapToOpenWeatherResponse(response);
-    } 
-    
+    }
+
     if (service === WeatherService.WeatherApi) {
       const response: AxiosResponse<WeatherApiResponse> = await axiosInstance.get('/forecast.json', {
         params: {
@@ -99,7 +99,19 @@ export const createAxiosInstance = (service: WeatherService) => {
     return null;
   }
 
+  // TODO: extend geocoging for other providers
+  const fetchGeoCodingData = async (query: string): Promise<Location[]> => {
+    return await axios.get(`https://api.openweathermap.org/geo/1.0/direct`, {
+      params: {
+        q: query,
+        limit: 5,
+        appid: process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY,
+      },
+    });
+  }
+
   return {
-    fetchWeather
+    fetchWeather,
+    fetchGeoCodingData
   };
 };
