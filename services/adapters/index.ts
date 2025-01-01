@@ -2,7 +2,7 @@ import { UnifiedWeatherResponse } from '@/types/UnifiedWeather';
 import { WeatherApiResponse } from '@/types/WeatherApi';
 import { OpenWeatherResponse } from '@/types/OpenWeatherMap';
 
-export const adaptWeatherApiResponse = (data: WeatherApiResponse): UnifiedWeatherResponse => {
+export const mapToWeatherApiResponse = (data: WeatherApiResponse): UnifiedWeatherResponse => {
   return {
     current: {
       temperature: data.current.temp_c,
@@ -25,7 +25,7 @@ export const adaptWeatherApiResponse = (data: WeatherApiResponse): UnifiedWeathe
   };
 };
 
-export const adaptOpenWeatherResponse = (data: OpenWeatherResponse): UnifiedWeatherResponse => {
+export const mapToOpenWeatherResponse = (data: OpenWeatherResponse): UnifiedWeatherResponse => {
   return {
     current: {
       temperature: data.current.temp,

@@ -6,7 +6,7 @@ interface IconProps extends SvgProps {
   name: string;
 }
 
-export const WeatherIcon: React.FC<IconProps> = ({ name, size = 280, ...props }) => {
+export const WeatherIcon: React.FC<IconProps> = ({ name, size = 150, ...props }) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: name }} style={{ height: size, width: size }} />

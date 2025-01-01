@@ -10,11 +10,9 @@ import Forecast from '@/components/forecast';
 import { useAppContext } from '@/context/AppContext';
 import { UnifiedWeatherResponse } from '@/types/UnifiedWeather';
 import { createAxiosInstance } from '@/api';
-import { adaptOpenWeatherResponse, adaptWeatherApiResponse } from '@/services/adapters';
-import { WeatherService } from '@/types/AppContext';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function StandalonePage() {
+const Home = () => {
   const { top, bottom } = useSafeAreaInsets();
   const { address, weatherService } = useAppContext();
   const [weather, setWeather] = useState<UnifiedWeatherResponse | null>(null);
@@ -28,26 +26,8 @@ export default function StandalonePage() {
     const axiosInstance = createAxiosInstance(weatherService);
 
     try {
-      let response;
-      if (weatherService === WeatherService.OpenWeatherMap) {
-        response = await axiosInstance.get('/data/3.0/onecall', {
-          params: {
-            lat: address.lat,
-            lon: address.lon,
-            exclude: 'minutely,hourly',
-            units: 'metric',
-          },
-        });
-        setWeather(adaptOpenWeatherResponse(response));
-      } else if (weatherService === WeatherService.WeatherApi) {
-        response = await axiosInstance.get('/forecast.json', {
-          params: {
-            q: `${address.lat},${address.lon}`,
-            days: 7,
-          },
-        });
-        setWeather(adaptWeatherApiResponse(response));
-      }
+      let weather = await axiosInstance.fetchWeather(address);
+      setWeather(weather);
     } catch (error) {
       console.error('Error fetching weather data:', error);
     } finally {
@@ -70,6 +50,7 @@ export default function StandalonePage() {
       {...blackGradientProps}
       style={[styles.background, { paddingTop: top, paddingBottom: bottom }]}
     >
+      <Header />
       {isLoading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="#ffffff" />
@@ -89,7 +70,7 @@ export default function StandalonePage() {
             showsVerticalScrollIndicator={false}
             overScrollMode="never"
           >
-            <Header />
+            
             <WeatherIcon name={weather.current.icon} />
             <CurrentWeather
               temp={weather.current.temperature}
@@ -123,3 +104,5 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 });
+
+export default Home;

@@ -70,4 +70,5 @@ const styles = StyleSheet.create({
     width: 26,
   },
 });
+
 export default CurrentWeather;

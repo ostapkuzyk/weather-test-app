@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`forecast renders without crashing 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "rgba(16,35,70,0.8)",
+      "borderRadius": 20,
+      "height": "40%",
+      "marginTop": 12,
+      "paddingHorizontal": 18,
+      "paddingVertical": 16,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "width": "100%",
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#ffffff",
+          "fontSize": 24,
+        }
+      }
+    >
+      Forecast
+    </Text>
+    <RNSVGSvgView
+      align="xMidYMid"
+      bbHeight="28"
+      bbWidth="28"
+      fill="white"
+      focusable={false}
+      height="28"
+      meetOrSlice={0}
+      minX={0}
+      minY={0}
+      style={
+        [
+          {
+            "backgroundColor": "transparent",
+            "borderWidth": 0,
+          },
+          {
+            "flex": 0,
+            "height": 28,
+            "width": 28,
+          },
+        ]
+      }
+      vbHeight={1024}
+      vbWidth={1024}
+      width="28"
+    >
+      <RNSVGGroup
+        fill={
+          {
+            "payload": 4294967295,
+            "type": 0,
+          }
+        }
+        propList={
+          [
+            "fill",
+          ]
+        }
+      >
+        <RNSVGPath
+          d="M716.8 184.32h163.84c10.863 0 21.283 4.316 28.963 11.997s11.997 18.1 11.997 28.963v655.36c0 10.863-4.317 21.283-11.997 28.963s-18.1 11.997-28.963 11.997h-737.28c-10.863 0-21.282-4.317-28.963-11.997s-11.997-18.1-11.997-28.963v-655.36c0-10.863 4.316-21.282 11.997-28.963s18.1-11.997 28.963-11.997h163.84v-81.92h81.92v81.92h245.76v-81.92h81.92v81.92zM839.68 430.080v-163.84h-122.88v81.92h-81.92v-81.92h-245.76v81.92h-81.92v-81.92h-122.88v163.84h655.36zM839.68 512h-655.36v327.68h655.36v-327.68zM266.24 593.92h204.8v163.84h-204.8v-163.84z"
+          fill={
+            {
+              "payload": 4278190080,
+              "type": 0,
+            }
+          }
+          propList={
+            [
+              "stroke",
+              "strokeWidth",
+            ]
+          }
+          stroke={
+            {
+              "payload": 4294967295,
+              "type": 0,
+            }
+          }
+          strokeWidth={5}
+        />
+      </RNSVGGroup>
+    </RNSVGSvgView>
+  </View>
+  <RCTScrollView
+    contentContainerStyle={
+      {
+        "alignItems": "center",
+        "flexDirection": "column",
+      }
+    }
+  >
+    <View>
+      <View
+        style={
+          {
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "marginVertical": 6,
+            "width": "100%",
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "color": "#ffffff",
+              "flex": 2,
+              "fontSize": 18,
+            }
+          }
+        >
+          Wednesday
+        </Text>
+        <View
+          style={
+            {
+              "flex": 2,
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "padding": 0,
+                "width": "100%",
+              }
+            }
+          >
+            <Image
+              source={
+                {
+                  "uri": "icon",
+                }
+              }
+              style={
+                {
+                  "height": 40,
+                  "width": 40,
+                }
+              }
+            />
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 2,
+              "flexDirection": "row",
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#ffffff",
+                "fontSize": 18,
+                "justifyContent": "flex-end",
+                "marginRight": 6,
+              }
+            }
+          >
+            1
+            °C
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#FFFFFF80",
+                "fontSize": 18,
+              }
+            }
+          >
+            0
+            °C
+          </Text>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;

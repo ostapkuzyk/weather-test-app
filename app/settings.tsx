@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     },
     close: {
         textAlign: 'right',
-        color: '#b91212',
+        color: '#ffffff',
     },
     mainWrap: {
         paddingHorizontal: 24,

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'expo-router';
 import { TAddress } from '../../../weather/types/AppContext';
+import _ from 'lodash';
 
 interface AddressInputProps {
   address: string;
@@ -15,24 +16,7 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
   const [error, setError] = useState('');
   const [searchResults, setSearchResults] = useState<Location[]>([]);
   const addressRegex = /^[a-zA-Z0-9\s,]+$/;
-
-  const useDebounce = (value: string, delay: number): string => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, delay);
-
-      return () => {
-        clearTimeout(handler);
-      };
-    }, [value, delay]);
-
-    return debouncedValue;
-  };
-
-  const debouncedAddress = useDebounce(address, 1000);
+  const [inputText, setInputText] = useState(address);
 
   const fetchAddresses = async (query: string) => {
     try {
@@ -45,30 +29,36 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
       })) as AxiosResponse<Location[]>;
       setSearchResults(response.data);
     } catch (error) {
+
       console.error('Error fetching addresses:', error);
     }
   };
 
-  useEffect(() => {
-    if (debouncedAddress.length >= 3 && addressRegex.test(debouncedAddress)) {
-      fetchAddresses(debouncedAddress);
+  const debounceFn = useMemo(() => _.debounce(fetchAddresses, 1000), []);
+
+  const handleChange = (value: string) => {
+    if (value.length >= 3 && addressRegex.test(value)) {
+      debounceFn(value);
     } else {
       setSearchResults([]);
     }
-  }, [debouncedAddress]);
+
+    setInputText(value)
+  };
 
   const handleSave = () => {
-    if (!address) {
+    if (!inputText) {
       setError('Address cannot be empty');
       return;
     }
 
-    if (!addressRegex.test(address)) {
+    if (!addressRegex.test(inputText)) {
       setError('Invalid characters in address');
       return;
     }
 
     setError('');
+    setAddress(inputText);
     router.back();
   };
 
@@ -79,7 +69,7 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
       lon: item.lon,
       lat: item.lat,
     });
-    setSearchResults([]);
+    router.back();
   };
 
   return (
@@ -89,18 +79,15 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
         style={[styles.input, error ? styles.inputError : null]}
         placeholder="Enter address"
         placeholderTextColor="#888"
-        value={address}
-        onChangeText={(text) => {
-          setAddress(text);
-          setError('');
-        }}
+        value={inputText}
+        onChangeText={handleChange}
       />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <FlatList
         data={searchResults}
         keyExtractor={(item, index) => `${item.lat}-${item.lon}-${index}`}
         renderItem={({ item }: { item: Location }) => (
-          <TouchableOpacity style={styles.resultItem} onPress={() => handleChooseResult(item)}>
+          <TouchableOpacity testID='resultItem' style={styles.resultItem} onPress={() => handleChooseResult(item)}>
             <Text style={styles.resultText}>{`${item.name}, ${item.state}, ${item.country}`}</Text>
           </TouchableOpacity>
         )}

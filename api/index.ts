@@ -7,26 +7,31 @@
 // email:weather.test@mailto.plus
 // pass:@4zNuJ%VCUDj$sK
 // apiKey:2177b147ec464aeb83891514243112 (for 14 Jan)
-import axios from 'axios';
+
+import { mapToOpenWeatherResponse, mapToWeatherApiResponse } from '@/services/adapters';
+import { TAddress, WeatherService } from '@/types/AppContext';
+import { OpenWeatherResponse } from '@/types/OpenWeatherMap';
+import { UnifiedWeatherResponse } from '@/types/UnifiedWeather';
+import { WeatherApiResponse } from '@/types/WeatherApi';
+import axios, { AxiosResponse } from 'axios';
 
 interface WeatherServiceConfig {
   apiKey: string;
   baseUrl: string;
 }
 
-console.log('process.env.WEATHERAPI_API_KEY: ', process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY);
-export const weatherServiceConfigs = {
-  openWeatherMap: {
+const weatherServiceConfigs: Record<WeatherService, WeatherServiceConfig> = {
+  [WeatherService.OpenWeatherMap]: {
     apiKey: process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY || '',
     baseUrl: 'https://api.openweathermap.org',
-  } as WeatherServiceConfig,
-  weatherApi: {
+  },
+  [WeatherService.WeatherApi]: {
     apiKey: process.env.EXPO_PUBLIC_WEATHERAPI_API_KEY || '',
     baseUrl: 'https://api.weatherapi.com/v1',
-  } as WeatherServiceConfig,
+  }
 };
 
-export const createAxiosInstance = (service: keyof typeof weatherServiceConfigs) => {
+export const createAxiosInstance = (service: WeatherService) => {
   const { apiKey, baseUrl } = weatherServiceConfigs[service];
 
   const axiosInstance = axios.create({
@@ -68,5 +73,33 @@ export const createAxiosInstance = (service: keyof typeof weatherServiceConfigs)
     }
   );
 
-  return axiosInstance;
+  const fetchWeather = async (address: TAddress): Promise<UnifiedWeatherResponse | null> => {
+    if (service === WeatherService.OpenWeatherMap) {
+      const response: AxiosResponse<OpenWeatherResponse> = await axiosInstance.get('/data/3.0/onecall', {
+        params: {
+          lat: address.lat,
+          lon: address.lon,
+          exclude: 'minutely,hourly',
+          units: 'metric',
+        },
+      });
+      return mapToOpenWeatherResponse(response);
+    } 
+    
+    if (service === WeatherService.WeatherApi) {
+      const response: AxiosResponse<WeatherApiResponse> = await axiosInstance.get('/forecast.json', {
+        params: {
+          q: `${address.lat},${address.lon}`,
+          days: 7,
+        },
+      });
+      return mapToWeatherApiResponse(response);
+    }
+
+    return null;
+  }
+
+  return {
+    fetchWeather
+  };
 };
