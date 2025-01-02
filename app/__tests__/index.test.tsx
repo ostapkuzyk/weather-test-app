@@ -55,7 +55,6 @@ jest.mock('@/api', () => ({
 }));
 
 describe('Home', () => {
-
   it('renders without crashing', async () => {    
     const { toJSON, findByTestId} = render(<Home />);
     expect(toJSON()).toMatchSnapshot();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, RefreshControl, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, RefreshControl, StyleSheet, View, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { blackGradientProps } from '@/constants/gradient';
@@ -19,6 +19,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { fetchWeather } = useAxiosInstance(weatherService);
+  const [error, setError] = useState<string>();
 
   const fetchWeatherData = async () => {
     if (!address.lat || !address.lon) return;
@@ -27,9 +28,12 @@ const Home = () => {
     
     try {
       let weather = await fetchWeather(address);
+      setError(undefined);
       setWeather(weather);
     } catch (error) {
-      console.error('Error fetching weather data:', error);
+      const errorStr = `Error fetching weather data:${error}`;
+      setError(errorStr);
+      console.error(errorStr);
     } finally {
       setIsLoading(false);
     }
@@ -51,6 +55,7 @@ const Home = () => {
       style={[styles.background, { paddingTop: top, paddingBottom: bottom }]}
     >
       <Header />
+      {error && <Text style={styles.errorText}>{error}</Text>}
       {isLoading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="#ffffff" />
@@ -102,6 +107,11 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
   },
 });
 

@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addressInput renders without crashing 1`] = `
+<View>
+  <Text
+    style={
+      {
+        "color": "#fff",
+        "fontSize": 16,
+        "marginBottom": 10,
+      }
+    }
+  >
+    Enter your address
+  </Text>
+  <TextInput
+    onChangeText={[Function]}
+    placeholder="Enter address"
+    placeholderTextColor="#888"
+    style={
+      [
+        {
+          "backgroundColor": "#0B3B8C",
+          "borderColor": "#0B3B8C",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "color": "#fff",
+          "fontSize": 16,
+          "padding": 12,
+        },
+      ]
+    }
+    testID="input"
+    value=""
+  />
+  <RCTScrollView
+    data={[]}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    keyExtractor={[Function]}
+    onContentSizeChange={[Function]}
+    onLayout={[Function]}
+    onMomentumScrollBegin={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={0.0001}
+    stickyHeaderIndices={[]}
+    viewabilityConfigCallbackPairs={[]}
+  >
+    <View />
+  </RCTScrollView>
+</View>
+`;

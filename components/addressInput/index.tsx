@@ -14,21 +14,22 @@ interface AddressInputProps {
 
 const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
   const router = useRouter();
-  const [error, setError] = useState('');
   const [searchResults, setSearchResults] = useState<Location[]>([]);
   const addressRegex = /^[a-zA-Z0-9\s,]+$/;
   const [inputText, setInputText] = useState(address);
-
+  const [error, setError] = useState<string>();
   const { weatherService } = useAppContext();
   const { fetchGeoCodingData } = useAxiosInstance(weatherService);
-  
+
   const fetchAddresses = async (query: string) => {
     try {
       const response = await fetchGeoCodingData(query);
-      setSearchResults(response);
+      setError(undefined);
+      setSearchResults(response.data);
     } catch (error) {
-
-      console.error('Error fetching addresses:', error);
+      const errorStr = `Error fetching addresses: ${error}`
+      console.error(errorStr);
+      setError(errorStr);
     }
   };
 
@@ -44,22 +45,6 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
     setInputText(value)
   };
 
-  const handleSave = () => {
-    if (!inputText) {
-      setError('Address cannot be empty');
-      return;
-    }
-
-    if (!addressRegex.test(inputText)) {
-      setError('Invalid characters in address');
-      return;
-    }
-
-    setError('');
-    setAddress(inputText);
-    router.back();
-  };
-
   const handleChooseResult = (item: Location) => {
     setAddress(item.name);
     onSave({
@@ -67,6 +52,7 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
       lon: item.lon,
       lat: item.lat,
     });
+
     router.back();
   };
 
@@ -74,25 +60,24 @@ const AddressInput = ({ address, setAddress, onSave }: AddressInputProps) => {
     <View>
       <Text style={styles.label}>Enter your address</Text>
       <TextInput
-        style={[styles.input, error ? styles.inputError : null]}
+        testID='input'
+        style={[styles.input]}
         placeholder="Enter address"
         placeholderTextColor="#888"
         value={inputText}
         onChangeText={handleChange}
       />
+
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <FlatList
         data={searchResults}
         keyExtractor={(item, index) => `${item.lat}-${item.lon}-${index}`}
         renderItem={({ item }: { item: Location }) => (
           <TouchableOpacity testID='resultItem' style={styles.resultItem} onPress={() => handleChooseResult(item)}>
-            <Text style={styles.resultText}>{`${item.name}, ${item.state}, ${item.country}`}</Text>
+            <Text style={styles.resultText}>{`${[item.name, item.state, item.country].filter(str => str !== undefined).join(', ')}`}</Text>
           </TouchableOpacity>
         )}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save</Text>
-      </TouchableOpacity>
     </View>
   );
 };

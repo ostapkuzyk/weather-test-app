@@ -100,7 +100,7 @@ export const useAxiosInstance = (service: WeatherService) => {
   }
 
   // TODO: extend geocoging for other providers
-  const fetchGeoCodingData = async (query: string): Promise<Location[]> => {
+  const fetchGeoCodingData = async (query: string): Promise<AxiosResponse<Location[]>> => {
     return await axios.get(`https://api.openweathermap.org/geo/1.0/direct`, {
       params: {
         q: query,
